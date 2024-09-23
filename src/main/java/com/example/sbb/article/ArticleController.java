@@ -1,8 +1,10 @@
 package com.example.sbb.article;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,13 +25,16 @@ public class ArticleController {
     }
 
     @GetMapping("/article/create")
-    public String articleCreate() {
+    public String articleCreate(ArticleForm articleForm) {
         return "article_form";
     }
 
     @PostMapping("/article/create")
-    public String articleCreate(@RequestParam(value = "title") String title, @RequestParam(value = "content") String content) {
-        this.articleService.create(title, content);
+    public String articleCreate(@Valid ArticleForm articleForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "article_form";
+        }
+        this.articleService.create(articleForm.getTitle(), articleForm.getContent());
         return "redirect:/article/list";
     }
 }
