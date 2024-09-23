@@ -36,4 +36,10 @@ public class ArticleService {
             throw new DataNotFoundException("article not found");
         }
     }
+
+    public void modify(Article article, String title, String content) {
+        article.setTitle(title);
+        article.setContent(content);
+        this.articleRepository.save(article);
+    }
 }
